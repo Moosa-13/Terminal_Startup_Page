@@ -14,5 +14,6 @@ If you want this as your start-up page,
 * select custom url instead of firefox default
 * give path to index file. (eg. file:///home/user/startup/index.html)
 * Tip - Go to script.js, search fo Moosa-13 and replace with your github name if you want it to show your github.
+* Also change rmr13 to your username.
 
 Let me know if someone uses it or finds it interesting.
