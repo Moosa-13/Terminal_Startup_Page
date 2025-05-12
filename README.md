@@ -4,7 +4,7 @@
 A simple start-up page I made for my firefox browser. Inspired by [this post](https://www.reddit.com/r/FirefoxCSS/comments/1fxsjzl/firefox_is_truly_the_best_browser/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button).
 
 ## Do this:
-Try it [out](https://moosa-13.github.io/Project/).
+Try it [out](https://moosa-13.github.io/Terminal_Startup_Page/).
 Type help and press enter. This will list out some comands you can try.
 
 ## How to use?
