@@ -4,113 +4,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Terminal Homepage</title>
-  <style>
-    body {
-      background-color: #0d1b2a;
-      color: #61cb8a;
-      font-family: 'Courier New', Courier, monospace;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-    }
-
-    .terminal-line {
-      font-size: 1.5rem;
-      margin-bottom: 40px;
-    }
-
-    .section-wrapper {
-      display: flex;
-      justify-content: center;
-      gap: 100px;
-    }
-
-    .section {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .section h2 {
-      font-size: 1.5rem;
-      margin-bottom: 10px;
-    }
-
-    a {
-      color: #b4f8c8;
-      text-decoration: underline;
-      font-size: 1rem;
-    }
-
-    a:hover {
-      color: #ffffff;
-    }
-
-    img {
-      vertical-align: middle;
-      margin-right: 8px;
-      filter: invert(85%);
-    }
-    .search-form {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 60px;
-    }
-
-    input[type="text"] {
-      background-color: transparent;
-      border: none;
-      color: #bae6fd;
-      font-size: 1rem;
-      font-family: 'Courier New', Courier, monospace;
-      outline: none;
-      padding: 4px 6px;
-      width: 300px;
-    }
-
-    input[type="text"]::placeholder {
-      color: #94a3b8;
-    }
-
-    .search-form select {
-      background-color: #0f172a;
-      border: 1px solid #7dd3fc;
-      color: #bae6fd;
-      font-family: inherit;
-      font-size: 0.9rem;
-      padding: 4px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <canvas id="rainCanvas"></canvas>
+
+  <div id="bootScreen">
+    <pre id="bootText"></pre>
+  </div>
+
   <h1>Welcome $rmr13!</h1>
+
   <form id="multiSearch" class="search-form">
     <label class="prompt-line">~ $</label>
     <input type="text" id="searchQuery" autofocus />
-    <select id="engine">
-      <option value="https://www.google.com/search?q=">Google</option>
-      <option value="https://www.youtube.com/results?search_query=">YouTube</option>
-      <option value="https://www.reddit.com/search/?q=">Reddit</option>
-    </select>
+    <div class="engine-icons" id="engineIcons">
+      <!-- icons inserted via JS -->
+    </div>
   </form>
-  
+
   <div class="section-wrapper">
-    <div class="section">
+    <div class="section" id="dev-section">
       <h2>~/dev</h2>
       <a href="https://github.com" target="_blank">
         <img src="github.svg" alt="GitHub" width="18" height="18" />
         Github</a>
+      <a href="https://mail.google.com/" target="_blank">
+        <img src="gmail.svg" alt="G-mail" width="18" height="18" />
+        G-mail</a>
     </div>
-    <div class="section">
+    <div class="section" id="general-section">
       <h2>~/general</h2>
       <a href="https://www.reddit.com" target="_blank">
         <img src="reddit.svg" alt="Reddit" width="18" height="18" />
@@ -118,200 +42,15 @@
       <a href="https://www.youtube.com/" target="_blank">
         <img src="youtube.svg" alt="Youtube" width="18" height="18" />
         Youtube</a>
+      <a href="https://netflix.com/" target="_blank">
+        <img src="netflix.svg" alt="Netflix" width="18" height="18" />
+        Netflix</a>
     </div>
   </div>
 
-  <script>
-    const form = document.getElementById('multiSearch');
-    const input = document.getElementById('searchQuery');
-  
-    // Apply saved colors on load
-    document.body.style.color = localStorage.getItem("text-color") || "#7dd3fc";
-    document.body.style.backgroundColor = localStorage.getItem("bg-color") || "#0f172a";
-  
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const query = input.value.trim();
-      const engine = document.getElementById('engine').value;
-  
-      // Match color change: color -t green or color -b #000000
-      const colorMatch = query.match(/^color\s+-(t|b)\s+(#[0-9a-fA-F]{3,6}|[a-zA-Z]+)$/);
-      if (colorMatch) {
-        const type = colorMatch[1];
-        const color = colorMatch[2];
-  
-        if (type === 't') {
-          document.body.style.color = color;
-          localStorage.setItem("text-color", color);
-        } else if (type === 'b') {
-          document.body.style.backgroundColor = color;
-          localStorage.setItem("bg-color", color);
-        }
-  
-        input.value = "";
-        return;
-      }
-  
-      // Match color reset
-      if (query === "color reset") {
-        localStorage.removeItem("text-color");
-        localStorage.removeItem("bg-color");
-        document.body.style.color = "#7dd3fc";
-        document.body.style.backgroundColor = "#0f172a";
-        input.value = "";
-        return;
-      }
-  
-      // Match add command: add ~/dev -n "Site Name" - "https://example.com"
-      // or: add ~/general -n "Site Name" - "https://example.com"
-      const addMatch = query.match(/^add\s+~\/(dev|general)\s+-n\s+"([^"]+)"\s+-\s+"([^"]+)"$/);
-      if (addMatch) {
-        const section = addMatch[1]; // dev or general
-        const name = addMatch[2];
-        const url = addMatch[3];
-        
-        // Add the new entry
-        addNewEntry(section, name, url);
-        
-        input.value = "";
-        return;
-      }
-      
-      // Match remove command: remove ~/dev -n "Site Name"
-      // or: remove ~/general -n "Site Name"
-      const removeMatch = query.match(/^remove\s+~\/(dev|general)\s+-n\s+"([^"]+)"$/);
-      if (removeMatch) {
-        const section = removeMatch[1]; // dev or general
-        const name = removeMatch[2];
-        
-        // Remove the entry
-        removeEntry(section, name);
-        
-        input.value = "";
-        return;
-      }
-  
-      // Default search behavior
-      if (query) {
-        window.open(engine + encodeURIComponent(query), '_blank');
-      }
-  
-      input.value = "";
-    });
+  <div id="output"></div>
 
-    // Function to add new entry
-    function addNewEntry(section, name, url) {
-      // Find the appropriate section element
-      const sectionElement = Array.from(document.querySelectorAll('.section h2'))
-        .find(h2 => h2.textContent.includes(`~/${section}`))?.parentElement;
-      
-      if (!sectionElement) return;
-      
-      // Create new link element
-      const link = document.createElement('a');
-      link.href = url.startsWith('http') ? url : `https://${url}`;
-      link.target = '_blank';
-      link.dataset.name = name; // Store name as data attribute for easy removal
-      
-      // Create icon (using a generic icon)
-      const icon = document.createElement('img');
-      icon.src = 'link.svg'; // Generic icon
-      icon.alt = name;
-      icon.width = 18;
-      icon.height = 18;
-      
-      // Add icon and name to the link
-      link.appendChild(icon);
-      link.appendChild(document.createTextNode(name));
-      
-      // Add link to section
-      sectionElement.appendChild(link);
-      
-      // Save to localStorage
-      saveEntry(section, { name, url });
-    }
-
-    // Function to remove an entry
-    function removeEntry(section, name) {
-      // Find the appropriate section element
-      const sectionElement = Array.from(document.querySelectorAll('.section h2'))
-        .find(h2 => h2.textContent.includes(`~/${section}`))?.parentElement;
-      
-      if (!sectionElement) return;
-      
-      // Find the link with the matching name
-      const links = Array.from(sectionElement.querySelectorAll('a'));
-      const linkToRemove = links.find(link => {
-        // Check if text content (excluding any child element text) contains the name
-        const linkText = Array.from(link.childNodes)
-          .filter(node => node.nodeType === Node.TEXT_NODE)
-          .map(node => node.textContent.trim())
-          .join('');
-        
-        return linkText === name || link.textContent.trim() === name;
-      });
-      
-      if (linkToRemove) {
-        // Remove the link from the DOM
-        sectionElement.removeChild(linkToRemove);
-        
-        // Remove from localStorage
-        removeEntryFromStorage(section, name);
-      }
-    }
-
-    // Save entry to localStorage
-    function saveEntry(section, entry) {
-      const key = `${section}-entries`;
-      const entries = JSON.parse(localStorage.getItem(key) || '[]');
-      entries.push(entry);
-      localStorage.setItem(key, JSON.stringify(entries));
-    }
-
-    // Remove entry from localStorage
-    function removeEntryFromStorage(section, name) {
-      const key = `${section}-entries`;
-      let entries = JSON.parse(localStorage.getItem(key) || '[]');
-      entries = entries.filter(entry => entry.name !== name);
-      localStorage.setItem(key, JSON.stringify(entries));
-    }
-
-    // Load entries from localStorage on page load
-    window.addEventListener('DOMContentLoaded', function() {
-      loadEntries('dev');
-      loadEntries('general');
-    });
-
-    // Load entries from localStorage
-    function loadEntries(section) {
-      const key = `${section}-entries`;
-      const entries = JSON.parse(localStorage.getItem(key) || '[]');
-      
-      // Find the correct section
-      const sectionElement = Array.from(document.querySelectorAll('.section h2'))
-        .find(h2 => h2.textContent.includes(`~/${section}`))?.parentElement;
-      
-      if (!sectionElement) return;
-      
-      // Add saved entries
-      entries.forEach(entry => {
-        const link = document.createElement('a');
-        link.href = entry.url.startsWith('http') ? entry.url : `https://${entry.url}`;
-        link.target = '_blank';
-        link.dataset.name = entry.name;
-        
-        const icon = document.createElement('img');
-        icon.src = 'link.svg'; // Generic icon
-        icon.alt = entry.name;
-        icon.width = 18;
-        icon.height = 18;
-        
-        link.appendChild(icon);
-        link.appendChild(document.createTextNode(entry.name));
-        
-        sectionElement.appendChild(link);
-      });
-    }
-  </script>
+  <!-- <div id="catLottie" style="position: fixed; bottom: 0; left: -200px; width: 100px; height: 100px; z-index: 10; display: none;"></div> -->
+  <script src="script.js"></script>  
 </body>
 </html>

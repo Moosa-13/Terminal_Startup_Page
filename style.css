@@ -1,0 +1,180 @@
+:root {
+      --bg-color: #0d1b2a;
+      --text-color: #7dd3fc;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .terminal-line {
+      font-size: 1.5rem;
+      margin-bottom: 40px;
+    }
+
+    .section-wrapper {
+      display: flex;
+      justify-content: center;
+      gap: 100px;
+    }
+
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    a {
+      color: var(--text-color);
+      text-decoration: underline;
+      font-size: 1rem;
+    }
+
+    a:hover {
+      color: #ffffff;
+    }
+
+    img {
+      vertical-align: middle;
+      margin-right: 8px;
+      filter: invert(85%);
+    }
+
+    .search-form {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 60px;
+    }
+
+    .engine-icons {
+      display: flex;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .engine-icons img {
+      width: 20px;
+      height: 20px;
+      filter: none;
+    }
+
+    .engine-icons img.active {
+      /* border: 2px solid #7dd3fc; */
+      /* border-radius: 4px; */
+      padding: 2px;
+    }
+
+    input[type="text"] {
+      background-color: transparent;
+      border: none;
+      color: var(--text-color);
+      font-size: 1rem;
+      font-family: 'Courier New', Courier, monospace;
+      outline: none;
+      padding: 4px 6px;
+      width: 300px;
+    }
+
+    input[type="text"]::placeholder {
+      color: #94a3b8;
+    }
+
+    #output {
+      font-family: 'Courier New', monospace;
+      color: var(--text-color);
+      margin-top: 20px;
+      max-width: 600px;
+      text-align: left;
+      white-space: pre-wrap;
+    }
+
+    #bootScreen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      padding: 2rem;
+      z-index: 9999;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+
+    #bootText {
+      white-space: pre-wrap;
+    }
+
+    @keyframes wipeFlash {
+        0%, 100% { background-color: var(--bg-color); }
+        50% { background-color: #7f1d1d; } /* intense red */
+        }
+
+        .wipe-mode {
+        animation: wipeFlash 0.5s alternate infinite;
+        }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+        }
+
+        .prompt-line.pulsing {
+        animation: pulse 1.5s infinite;
+        }
+
+    .animated-bg {
+        animation: universalFlow 12s ease infinite;
+        background: linear-gradient(
+            270deg,
+            var(--bg-color),
+            color-mix(in srgb, var(--bg-color) 80%, var(--text-color)),
+            var(--bg-color)
+        );
+        background-size: 600% 600%;
+        }
+
+    @keyframes universalFlow {
+        0%   { background-position: 0% 50%; }
+        50%  { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+        }
+
+    #rainCanvas {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+        }
+    
+    @keyframes catRunLottie {
+        0%   { left: -150px; }
+        100% { left: 100vw; }
+        }
+
+
