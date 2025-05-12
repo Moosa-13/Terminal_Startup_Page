@@ -10,7 +10,7 @@ If you want this as your start-up page,
 * clone the repo
 * go to firefox settings > Home
 * select custom url instead of firefox default
-* give path to index file.
+* give path to index file. (eg. file:///home/user/startup/index.html)
 * Tip - Go to script.js, search fo Moosa-13 and replace with your github name if you want it to show your github.
 
 Let me know if someone uses it or finds it interesting.
