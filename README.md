@@ -1,4 +1,6 @@
 # Start-up page
+![image](https://github.com/user-attachments/assets/17e8f9b2-a25f-4053-9bc3-a7c58e8478f8)
+
 A simple start-up page I made for my firefox browser. Inspired by [this post](https://www.reddit.com/r/FirefoxCSS/comments/1fxsjzl/firefox_is_truly_the_best_browser/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button).
 
 ## Do this:
